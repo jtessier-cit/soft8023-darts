@@ -4,14 +4,20 @@ import domain.darts_match as darts_match
 from datatype.enums import DartMultiplier
 from domain import visit
 
+# create the factory
 factory = object_factory.ObjectFactory()
+# register the builder for X01 game type
 factory.register_builder('X01', x01_match.X01MatchBuilder())
 
+# get a reference to the factory
 x01 = factory.create('X01')
+# create a darts match
 match = darts_match.DartsMatch()
 
+# create players in the match
 player1_index = match.register_player('Alice')
 player2_index = match.register_player('Kalifa')
+
 x01.set_match(match)
 
 my_visit = visit.Visit([(DartMultiplier.SINGLE, 20), (DartMultiplier.TREBLE, 20), (DartMultiplier.SINGLE, 5)])

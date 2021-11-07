@@ -10,7 +10,7 @@ class ObjectFactory:
     def register_builder(self, key, builder):
         self._builders[key] = builder
 
-    # return a builder
+    # return a the result of the builder (object)
     def create(self, key, **kwargs):
         # get the builder class from the key/object type
         builder = self._builders.get(key)

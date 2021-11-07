@@ -16,6 +16,7 @@ class DartsMatch:
             index = len(self.players)
             # append the player to the list of players
             self.players.append(username)
+            self.visits.append([])
             return index
         else:
             # if player already in list, return -1 - error?
