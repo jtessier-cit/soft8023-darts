@@ -41,7 +41,7 @@ def run():
     print(response.message)
 
     response = stub.WhatIsLeft(darts_match_pb2.LeftRequest(matchId=match1, playerIndex=m1_player1))
-    print(response)
+    print(str(response.remainder) + " remaining.\n")
 
 
     # match 2 player 1
