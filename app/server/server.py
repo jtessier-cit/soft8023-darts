@@ -101,10 +101,10 @@ class DartServer(DartsMatchServicer):
                 v = y - 1
             time.sleep(1)
 
-    def ProcessLeft(self, request, context):
+    def WhatIsLeft(self, request, context):
         print("in 'left' for: " + str(request.matchId))
         match = self.registry.get_match(request.matchId)
-        player = match.players[request.playerIndex]
+        # player = match.players[request.playerIndex]
         score = match.scores[request.playerIndex]
         return LeftResponse(remainder=score)
 
