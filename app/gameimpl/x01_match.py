@@ -1,6 +1,7 @@
 from service.match_service import MatchVisitTemplate
 from service.match_service import MatchManager
-from datatype.enums import DartMultiplier
+# Lab 03 add MatchStatus
+from datatype.enums import DartMultiplier, MatchStatus
 
 # CHECKOUTS = {
 #     170: "T20 T20 Bull",
@@ -186,13 +187,15 @@ CHECKOUTS = {
     170: "T20 T20 Bull"
 }
 
-# STARTING_TOTAL = 501
+STARTING_TOTAL = 501
 
 class X01Match(MatchManager, MatchVisitTemplate):
 
-    def __init__(self, starting_total):
+    # def __init__(self, starting_total=501):
+    def __init__(self):
         super().__init__()
-        self._starting_total = starting_total
+        # self._starting_total = starting_total
+        self._starting_total = STARTING_TOTAL
         self.scores = []  # list of scores remaining parallel to players
         self.averages = []  # single-dart average (x 3 for 3-dart average)
         self.first9 = []  # average for first 9 darts
@@ -203,16 +206,18 @@ class X01Match(MatchManager, MatchVisitTemplate):
             self.scores.append(self._starting_total)  # Might want to parameterize the starting total
             self.first9.append(None)
             self.averages.append(None)
+        # match is in progress after initializing
+        self.match.status = MatchStatus.IN_PROGRESS
 
     def validate_visit(self, player_index, visit):
         # if the last player is the same as the current player, visit isn't valid (out of turn)
-        if self.match.last_player_index is player_index:
+        if self.match.last_player_index is player_index:  # Note: this won't work properly for 3 players...
             return False, "Player " + str(player_index + 1) + " is not in the correct sequence. Visit ignored."
 
         # if the match status is not active, visit isn't valid (inactive game)
-        if not self.match.active:
+        if self.match.status != MatchStatus.IN_PROGRESS:
             return False, "Game has ended."
-
+        # print(str(self.match.last_Player_index) + "-" + str(player_index))
         # advance the last player index - player's turn will proceed
         self.match.last_player_index = player_index
         return True, None
@@ -234,9 +239,10 @@ class X01Match(MatchManager, MatchVisitTemplate):
             if dart.multiplier == DartMultiplier.DOUBLE and self.scores[player_index] - dart.get_score() == 0:
                 # game, shot!
                 self.scores[player_index] = 0  # set the player's score to 0
-                self.match.active = False  # game is no longer active
+                self.match.status = MatchStatus.FINISHED  # game is no longer active
                 return i  # return the dart number
             else:
+                print("deducting for " + str(player_index))
                 self.scores[player_index] -= dart.get_score()  # reduce the player's score
 
         return 0  # return 0 - game isn't done
@@ -305,5 +311,8 @@ class X01MatchBuilder:
     def __init__(self):
         pass
 
-    def __call__(self, starting_total):
-        return X01Match(starting_total)
+    # def __call__(self, starting_total):
+    def __call__(self):
+
+        # return X01Match(starting_total)
+        return X01Match()

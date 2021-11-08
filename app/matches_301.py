@@ -14,7 +14,9 @@ config = {
 }
 
 # get a reference to the factory
-x01 = factory.create('X01', **config)
+# x01 = factory.create('X01', **config)
+x01 = factory.create('X01')
+
 # create a darts match
 match = darts_match.DartsMatch()
 

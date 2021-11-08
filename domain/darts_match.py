@@ -1,8 +1,12 @@
+from datatype.enums import MatchStatus
+
+
 class DartsMatch:
 
     # constructor to create a typical darts match
     def __init__(self):
-        self.active = True
+        # self.active = True
+        self.status = MatchStatus.INVALID
         self.players = []
         self.last_player_index = -1
         self.visits = []
