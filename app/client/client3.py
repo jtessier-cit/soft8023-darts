@@ -40,6 +40,10 @@ def run():
     response = stub.ProcessVisit(darts_match_pb2.VisitRequest(matchId=match1, playerIndex=m1_player1, visit=my_visit))
     print(response.message)
 
+    response = stub.WhatIsLeft(darts_match_pb2.LeftRequest(matchId=match1, playerIndex=m1_player1))
+    print(response)
+
+
     # match 2 player 1
     my_visit = [darts_match_pb2.Dart(multiplier=DartMultiplier.SINGLE, segment=10),
                 darts_match_pb2.Dart(multiplier=DartMultiplier.TREBLE, segment=15),
@@ -125,8 +129,6 @@ def run():
     response = stub.ProcessVisit(darts_match_pb2.VisitRequest(matchId=match1, playerIndex=m1_player2, visit=my_visit))
     print(response.message)
 
-    # response = stub.WhatIsLeft(matchId=match1, playerIndex=m1_player1)
-    # print(response)
 
     # match 1 player 1
     my_visit = [darts_match_pb2.Dart(multiplier=DartMultiplier.TREBLE, segment=10),
