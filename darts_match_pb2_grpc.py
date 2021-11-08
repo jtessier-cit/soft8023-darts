@@ -44,6 +44,11 @@ class DartsMatchStub(object):
                 request_serializer=darts__match__pb2.WatchRequest.SerializeToString,
                 response_deserializer=darts__match__pb2.WatchResponse.FromString,
                 )
+        self.WhatIsLeft = channel.unary_unary(
+                '/app.DartsMatch/WhatIsLeft',
+                request_serializer=darts__match__pb2.LeftRequest.SerializeToString,
+                response_deserializer=darts__match__pb2.LeftResponse.FromString,
+                )
 
 
 class DartsMatchServicer(object):
@@ -85,6 +90,12 @@ class DartsMatchServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def WhatIsLeft(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_DartsMatchServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -117,6 +128,11 @@ def add_DartsMatchServicer_to_server(servicer, server):
                     servicer.WatchMatch,
                     request_deserializer=darts__match__pb2.WatchRequest.FromString,
                     response_serializer=darts__match__pb2.WatchResponse.SerializeToString,
+            ),
+            'WhatIsLeft': grpc.unary_unary_rpc_method_handler(
+                    servicer.WhatIsLeft,
+                    request_deserializer=darts__match__pb2.LeftRequest.FromString,
+                    response_serializer=darts__match__pb2.LeftResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -227,5 +243,22 @@ class DartsMatch(object):
         return grpc.experimental.unary_stream(request, target, '/app.DartsMatch/WatchMatch',
             darts__match__pb2.WatchRequest.SerializeToString,
             darts__match__pb2.WatchResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def WhatIsLeft(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/app.DartsMatch/WhatIsLeft',
+            darts__match__pb2.LeftRequest.SerializeToString,
+            darts__match__pb2.LeftResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

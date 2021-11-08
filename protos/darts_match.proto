@@ -9,6 +9,7 @@ service DartsMatch {
   rpc ProcessVisit(VisitRequest) returns (VisitResponse) {}
   rpc ListMatches(ListRequest) returns (ListResponse) {}
   rpc WatchMatch(WatchRequest) returns (stream WatchResponse) {}
+  rpc WhatIsLeft(LeftRequest) returns (LeftResponse) {}
 }
 
 message MatchRequest {
@@ -91,4 +92,13 @@ message WatchResponse {
   Player player = 1;
   repeated Dart darts = 2;
   int32 score = 3;
+}
+
+message LeftRequest {
+  bytes matchId = 1;
+  int32 playerIndex = 2;
+}
+
+message LeftResponse {
+  int32 remainder = 1;
 }

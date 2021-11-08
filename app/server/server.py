@@ -7,7 +7,7 @@ import grpc
 
 from app.gameimpl import x01_match
 from darts_match_pb2 import VisitResponse, RegisterResponse, FinalizeResponse, MatchResponse, \
-    WatchResponse, Player, Dart
+    WatchResponse, Player, Dart, LeftResponse
 from darts_match_pb2_grpc import DartsMatchServicer, add_DartsMatchServicer_to_server
 from app.server.match_registry import MatchRegistry
 from domain import darts_match, visit
@@ -100,6 +100,13 @@ class DartServer(DartsMatchServicer):
                                             score=0)
                 v = y - 1
             time.sleep(1)
+
+    def ProcessLeft(self, request, context):
+        print("in 'left' for: " + str(request.matchId))
+        match = self.registry.get_match(request.matchId)
+        player = match.players[request.playerIndex]
+        score = match.scores[request.playerIndex]
+        return LeftResponse(remainder=score)
 
 
 def serve():

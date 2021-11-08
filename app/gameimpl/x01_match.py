@@ -187,15 +187,15 @@ CHECKOUTS = {
     170: "T20 T20 Bull"
 }
 
-STARTING_TOTAL = 501
+# STARTING_TOTAL = 501
 
 class X01Match(MatchManager, MatchVisitTemplate):
 
     # def __init__(self, starting_total=501):
-    def __init__(self):
+    def __init__(self, starting_total=501):
         super().__init__()
         # self._starting_total = starting_total
-        self._starting_total = STARTING_TOTAL
+        self._starting_total = starting_total
         self.scores = []  # list of scores remaining parallel to players
         self.averages = []  # single-dart average (x 3 for 3-dart average)
         self.first9 = []  # average for first 9 darts
@@ -312,7 +312,7 @@ class X01MatchBuilder:
         pass
 
     # def __call__(self, starting_total):
-    def __call__(self):
+    def __call__(self, **kwargs):
 
         # return X01Match(starting_total)
-        return X01Match()
+        return X01Match(**kwargs)
