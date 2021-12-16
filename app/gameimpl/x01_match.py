@@ -1,3 +1,7 @@
+import json
+
+import pika as pika
+
 from service.match_service import MatchVisitTemplate
 from service.match_service import MatchManager
 # Lab 03 add MatchStatus
@@ -278,6 +282,27 @@ class X01Match(MatchManager, MatchVisitTemplate):
 
         # set averages for player
         self.averages[player_index] = (self._starting_total - self.scores[player_index]) / num_darts_thrown
+
+        # send a message using RabbitMQ - note this is too implementation specific and should be abstracted, i.e. move
+        # rabbitmq specific code to a separate service layer class
+        # Let's do something simple - store the darts so a lifetime 3-dart average can be calculated; this is something
+        # of a lower priority than the ongoing match, so can be backgrounded / temporally-decoupled somewhat with a
+        # message queue (handle load better).
+        # We will need to serialize the darts list - JSON is very suitable for this
+
+        username = self.match.players[player_index]
+        match_type = "X01"
+        darts = []
+        for dart in visit.darts:
+            darts.append([dart.multiplier, dart.segment])
+        message = [username, match_type, darts]
+        connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))  # we could parameterize the host
+        channel = connection.channel()
+        channel.queue_declare(queue='player-stats')
+        channel.basic_publish(exchange='',
+                              routing_key='player-stats',
+                              body=json.dumps(message))
+        connection.close()
 
     def format_summary(self, player_index, visit):
         # Include suggested checkout if remaining score can be checked out in 3 darts
